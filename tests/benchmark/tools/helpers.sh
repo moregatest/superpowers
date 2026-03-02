@@ -73,7 +73,7 @@ build_tool_cmd() {
             echo "claude -p $(printf '%q' "$prompt") --permission-mode bypassPermissions --output-format stream-json --add-dir $(printf '%q' "$project_dir") --cwd $(printf '%q' "$project_dir")"
             ;;
         codex)
-            echo "codex --prompt $(printf '%q' "$prompt") --writable-root $(printf '%q' "$project_dir") --cwd $(printf '%q' "$project_dir")"
+            echo "codex exec $(printf '%q' "$prompt")"
             ;;
         opencode)
             echo "cd $(printf '%q' "$project_dir") && opencode run $(printf '%q' "$prompt")"

@@ -29,8 +29,8 @@ tools:
     command: "claude -p"
     flags: "--permission-mode bypassPermissions --output-format stream-json"
   codex:
-    command: "codex --prompt"
-    flags: "--writable-root"
+    command: "codex exec"
+    flags: ""
   opencode:
     command: "opencode run"
     flags: ""

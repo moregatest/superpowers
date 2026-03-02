@@ -111,9 +111,7 @@ case "$TOOL" in
             > "$TEMP_OUTPUT" 2>/dev/null || true
         ;;
     codex)
-        codex --prompt "$EXPAND_PROMPT" \
-            --writable-root "$PROJECT_DIR" \
-            --cwd "$PROJECT_DIR" \
+        codex exec "$EXPAND_PROMPT" \
             > "$TEMP_OUTPUT" 2>/dev/null || true
         ;;
     opencode)

@@ -97,8 +97,7 @@ case "$JUDGE_TOOL" in
             > "$TEMP_RESULT" 2>/dev/null || true
         ;;
     codex)
-        codex --prompt "$JUDGE_PROMPT" \
-            --model "$JUDGE_MODEL" \
+        codex exec "$JUDGE_PROMPT" \
             > "$TEMP_RESULT" 2>/dev/null || true
         ;;
     opencode)

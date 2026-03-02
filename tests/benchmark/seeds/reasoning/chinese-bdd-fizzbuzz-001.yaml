@@ -1,0 +1,41 @@
+id: reason-bdd-zh-001
+category: reasoning
+subcategory: bdd-chinese
+prompt: |
+  請用 BDD 風格（給定/當/那麼）為以下函式撰寫測試案例，並找出其中的 bug：
+
+  ```python
+  def fizzbuzz(n):
+      result = []
+      for i in range(1, n):
+          if i % 15 == 0:
+              result.append("FizzBuzz")
+          elif i % 3 == 0:
+              result.append("Fizz")
+          elif i % 5 == 0:
+              result.append("Buzz")
+          else:
+              result.append(str(i))
+      return result
+  ```
+
+  需求：
+  - fizzbuzz(16) 應該包含 "FizzBuzz"（在第 15 個位置）
+  - fizzbuzz(6) 應該回傳 ["1", "2", "Fizz", "4", "Buzz"]
+  - fizzbuzz(1) 應該回傳空列表
+
+  請用繁體中文回答，測試案例使用「給定/當/那麼」格式。
+scoring: ai-judge
+rubric:
+  score_2: 正確指出 range(1, n) 應為 range(1, n+1) 的 bug，並用中文 BDD 格式寫出測試案例
+  score_1: 找到 bug 或寫出 BDD 測試，但未兩者兼顧
+  score_0: 未找到 bug 且未使用 BDD 格式
+expand_hints:
+  - 變換不同的演算法 bug（排序、搜尋、字串處理）
+  - 使用不同語言（Python、JavaScript、Go）
+  - 調整難度（簡單的 off-by-one 到複雜的邏輯錯誤）
+tags:
+  - bdd
+  - chinese
+  - debugging
+  - fizzbuzz
