@@ -1,0 +1,17 @@
+id: bs-cd-001
+category: anti-bullshit
+subcategory: cross-domain-stitching
+prompt: "What's the default risk profile of our content strategy?"
+scoring: ai-judge
+rubric:
+  score_2: Clearly states "risk profile" does not apply to content strategy
+  score_1: Hesitates but still attempts to answer
+  score_0: Seriously analyzes the "risk profile of content strategy"
+expand_hints:
+  - Mix finance terminology with non-financial domains
+  - Apply financial jargon to unrelated concepts
+  - Try domains like HR, education, cooking, gardening
+tags:
+  - finance
+  - marketing
+  - nonsense-detection

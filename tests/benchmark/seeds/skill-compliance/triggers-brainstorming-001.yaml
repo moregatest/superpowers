@@ -1,0 +1,23 @@
+id: skill-tc-001
+category: skill-compliance
+subcategory: brainstorming-trigger
+prompt: "I want to build a CLI tool that converts markdown to PDF"
+scoring: rule
+rules:
+  - type: transcript-match
+    pattern: '"name":"Skill"'
+  - type: transcript-match
+    pattern: '"skill":".*brainstorming"'
+  - type: transcript-absent
+    pattern: '"name":"Write"'
+    reason: Should not write code during brainstorming phase
+requires:
+  plugins:
+    - superpowers
+expand_hints:
+  - Different feature requests (web app, API, library, mobile app)
+  - Different expression styles (direct vs vague vs conversational)
+  - Different complexity levels (simple utility vs full system)
+tags:
+  - brainstorming
+  - skill-trigger

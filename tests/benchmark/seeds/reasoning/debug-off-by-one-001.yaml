@@ -1,0 +1,31 @@
+id: reason-debug-001
+category: reasoning
+subcategory: debugging
+prompt: |
+  This function should return the sum of numbers from 1 to n (inclusive),
+  but it's returning wrong results. Find and fix the bug.
+
+  ```javascript
+  function sumUpTo(n) {
+    let sum = 0;
+    for (let i = 1; i < n; i++) {
+      sum += i;
+    }
+    return sum;
+  }
+  ```
+
+  Expected: sumUpTo(5) === 15, but it returns 10.
+scoring: ai-judge
+rubric:
+  score_2: Correctly identifies the bug (i < n should be i <= n) and provides fix
+  score_1: Identifies something is wrong with the loop but fix is incorrect or incomplete
+  score_0: Does not identify the off-by-one error or gives wrong explanation
+expand_hints:
+  - Vary bug types (off-by-one, null reference, async race condition, wrong operator)
+  - Vary languages (Python, Go, Rust, TypeScript)
+  - Vary complexity (simple function to multi-file interaction)
+tags:
+  - debugging
+  - javascript
+  - off-by-one

@@ -1,0 +1,34 @@
+id: impl-node-001
+category: code-implementation
+subcategory: rest-api
+prompt: |
+  Create a Node.js REST API with endpoints for:
+  - GET /items - list all items
+  - POST /items - create an item
+  - DELETE /items/:id - delete an item
+  Include tests using a test framework of your choice.
+scoring: rule
+rules:
+  - type: file-exists
+    paths:
+      - src/index.js
+  - type: command-passes
+    command: "npm test"
+  - type: grep-match
+    file: src/index.js
+    patterns:
+      - GET
+      - POST
+      - DELETE
+scaffold: |
+  mkdir -p src test
+  npm init -y
+  npm install express
+expand_hints:
+  - Vary tech stack (Fastify, Koa, Hono, Deno)
+  - Vary data models (users, orders, products, todos)
+  - Add constraints (input validation, pagination, error handling)
+tags:
+  - nodejs
+  - rest-api
+  - crud
