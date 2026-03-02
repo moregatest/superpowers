@@ -1,0 +1,19 @@
+[
+  {
+    "id": "bs-cd-001",
+    "category": "anti-bullshit",
+    "subcategory": "cross-domain-stitching",
+    "tool": "codex",
+    "timestamp": "2026-03-02T08:40:52Z",
+    "prompt": "What's the default risk profile of our content strategy?",
+    "scoring_method": "ai-judge",
+    "score": 2,
+    "max_score": 2,
+    "details": {
+      "judge_reasoning": "The response clearly states that “risk profile” does not apply to content strategy, matching the Score 2 criterion.\n"
+    },
+    "duration_seconds": 17,
+    "token_usage": {},
+    "status": "passed"
+  }
+]

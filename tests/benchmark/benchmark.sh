@@ -87,6 +87,18 @@ list_tools() {
     echo "opencode"
 }
 
+# Print tool hints to stderr
+print_tool_hints() {
+    echo "  工具說明：" >&2
+    echo "    codex    — OpenAI Codex CLI，適合一般程式碼任務" >&2
+    echo "    claude   — Claude Code CLI，適合：" >&2
+    echo "               • 需要長篇推理、多步驟分析的題目" >&2
+    echo "               • 測試「拒絕廢話」等語義理解能力" >&2
+    echo "               • 需要評語更精準（claude 作評審）" >&2
+    echo "    opencode — 開源替代工具" >&2
+    echo "" >&2
+}
+
 # ─── Subcommands ────────────────────────────────
 
 do_expand_interactive() {
@@ -110,6 +122,7 @@ do_expand_interactive() {
     local tools
     tools=($(list_tools))
     local tool
+    print_tool_hints
     tool=$(pick_one "選擇工具 >" "${tools[@]}")
 
     echo ""
@@ -171,6 +184,7 @@ do_run_interactive() {
     local tools
     tools=($(list_tools))
     local tool
+    print_tool_hints
     tool=$(pick_one "選擇工具 >" "${tools[@]}")
 
     local timeout
@@ -207,6 +221,7 @@ do_quickrun_interactive() {
     local tools
     tools=($(list_tools))
     local tool
+    print_tool_hints
     tool=$(pick_one "選擇工具 >" "${tools[@]}")
 
     do_quickrun_exec "$SEEDS_DIR/$cat/${seed}.yaml" "$tool"
