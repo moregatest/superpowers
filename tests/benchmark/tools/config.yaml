@@ -1,0 +1,36 @@
+# Seed-Expand-Review Test Pipeline Configuration
+
+# Default tool for expanding seeds and running tests
+default_tool: claude
+
+# AI Judge settings
+judge:
+  tool: claude          # claude | codex | opencode | api
+  model: opus           # opus | sonnet | haiku
+  api_fallback: true    # Fall back to API when CLI unavailable
+
+# Expansion defaults
+expand:
+  count: 10
+  difficulty_distribution:
+    easy: 0.4
+    medium: 0.4
+    hard: 0.2
+
+# Runner defaults
+runner:
+  timeout: 300          # seconds per test
+  concurrency: 1        # parallel tests (future)
+  output_format: json
+
+# Tool execution templates
+tools:
+  claude:
+    command: "claude -p"
+    flags: "--permission-mode bypassPermissions --output-format stream-json"
+  codex:
+    command: "codex --prompt"
+    flags: "--writable-root"
+  opencode:
+    command: "opencode run"
+    flags: ""
