@@ -43,7 +43,10 @@ if [ ! -d "$SEARCH_DIR" ]; then
     exit 0
 fi
 
-mapfile -t FILES < <(find "$SEARCH_DIR" -name "*.yaml" -type f | sort)
+FILES=()
+while IFS= read -r line; do
+    FILES+=("$line")
+done < <(find "$SEARCH_DIR" -name "*.yaml" -type f | sort)
 
 if [ ${#FILES[@]} -eq 0 ]; then
     echo "No pending items to review."

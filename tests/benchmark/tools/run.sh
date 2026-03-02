@@ -64,7 +64,10 @@ if [ ! -d "$SEARCH_DIR" ]; then
     exit 0
 fi
 
-mapfile -t TEST_FILES < <(find "$SEARCH_DIR" -name "*.yaml" -type f | sort)
+TEST_FILES=()
+while IFS= read -r line; do
+    TEST_FILES+=("$line")
+done < <(find "$SEARCH_DIR" -name "*.yaml" -type f | sort)
 
 if [ ${#TEST_FILES[@]} -eq 0 ]; then
     echo "No approved tests to run."
@@ -88,9 +91,6 @@ PASSED=0
 FAILED=0
 SKIPPED=0
 ERRORS=0
-
-# Category stats tracking
-declare -A CAT_TESTS CAT_SCORES CAT_MAX
 
 for i in "${!TEST_FILES[@]}"; do
     FILE="${TEST_FILES[$i]}"
@@ -324,11 +324,6 @@ print(json.dumps({'input': input_t, 'output': output_t, 'cost_usd': round(cost, 
         echo "  ERROR (${DURATION}s)"
     fi
 
-    # Track per-category stats
-    CAT_TESTS[$CAT]=$(( ${CAT_TESTS[$CAT]:-0} + 1 ))
-    [ "$SCORE" -ge 0 ] && CAT_SCORES[$CAT]=$(( ${CAT_SCORES[$CAT]:-0} + SCORE ))
-    CAT_MAX[$CAT]=$(( ${CAT_MAX[$CAT]:-0} + MAX_SCORE ))
-
     # Cleanup
     rm -f "$RESPONSE_FILE" "$TRANSCRIPT_FILE"
     [ -n "$TEST_PROJECT_DIR" ] && rm -rf "$TEST_PROJECT_DIR"
@@ -339,21 +334,20 @@ echo "$RESULTS" | jq '.' > "$RESULT_FILE"
 
 # Print summary
 print_header "Run Summary ($TOOL, $DATE)"
-printf "%-25s %5s %10s %10s\n" "Category" "Tests" "Avg Score" "Pass Rate"
+printf "%-25s %5s %10s %10s\n" "Category" "Tests" "Score" "Pass Rate"
 print_sep
 
-for CAT in $(echo "${!CAT_TESTS[@]}" | tr ' ' '\n' | sort); do
-    T=${CAT_TESTS[$CAT]}
-    S=${CAT_SCORES[$CAT]:-0}
-    M=${CAT_MAX[$CAT]:-0}
-    if [ "$M" -gt 0 ]; then
-        AVG=$(python3 -c "print(f'{$S/$M:.2f}')")
-        RATE=$(python3 -c "print(f'{$S/$M*100:.0f}%')")
-    else
-        AVG="N/A"
-        RATE="N/A"
-    fi
-    printf "%-25s %5d %10s %10s\n" "$CAT" "$T" "$S/$M" "$RATE"
+# Compute per-category stats from results JSON
+echo "$RESULTS" | jq -r '
+  group_by(.category) | sort_by(.[0].category) | .[] |
+  (.[0].category) as $cat |
+  (length) as $t |
+  ([.[] | select(.score >= 0) | .score] | add // 0) as $s |
+  ([.[] | .max_score] | add // 0) as $m |
+  (if $m > 0 then (($s / $m * 100) | floor | tostring) + "%" else "N/A" end) as $rate |
+  "\($cat)|\($t)|\($s)/\($m)|\($rate)"
+' 2>/dev/null | while IFS='|' read -r cat t score rate; do
+    printf "%-25s %5s %10s %10s\n" "$cat" "$t" "$score" "$rate"
 done
 
 print_sep
