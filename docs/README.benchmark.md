@@ -29,13 +29,18 @@ run.sh --> 跨工具執行（claude / codex / opencode）
      +-- rule-check（自動規則檢查）
      +-- judge.sh（AI 評審，預設 claude opus）
      |
-results/（JSON 結構化結果 + 摘要報告）
+results/（JSON 結構化結果）
+     |
+report.sh --> 人類友好的中文報告（text / markdown）
 ```
+
+**推薦入口：`benchmark.sh`** — 互動選單或子指令，無需記憶各工具參數。
 
 ## 目錄結構
 
 ```
 tests/benchmark/
+├── benchmark.sh                    # ★ 互動式入口（選單 + 子指令）
 ├── seeds/                          # 專家撰寫的種子測試
 │   ├── skill-compliance/           # Skill 觸發與流程合規
 │   ├── code-implementation/        # 程式碼實作任務
@@ -52,7 +57,8 @@ tests/benchmark/
     ├── expand.sh                   # AI 種子擴展器
     ├── review.sh                   # 互動式審核工具
     ├── judge.sh                    # AI 評審
-    └── run.sh                      # 測試執行器
+    ├── run.sh                      # 測試執行器
+    └── report.sh                   # 人類友好的結果報告
 ```
 
 ## 使用方式
@@ -62,6 +68,52 @@ tests/benchmark/
 - `python3` 與 `PyYAML`（`pip3 install pyyaml`）
 - `jq`（JSON 處理）
 - `claude` CLI（或 `codex` / `opencode`）
+
+### 互動式入口（推薦）
+
+```bash
+cd tests/benchmark
+./benchmark.sh          # 進入互動選單
+```
+
+選單提供五個操作，全程中文引導，無需記憶參數：
+
+```
+Benchmark Pipeline
+========================================
+  1) 擴展種子 (expand)
+  2) 審核變體 (review)
+  3) 執行測試 (run)
+  4) 查看報告 (report)
+  5) 快速測試 (quickrun)
+  q) 離開
+```
+
+**子指令模式（適合 CI / 腳本）：**
+
+```bash
+./benchmark.sh expand   seeds/anti-bullshit/cross-domain-stitching-001.yaml --count 5
+./benchmark.sh review   --category anti-bullshit
+./benchmark.sh run      --tool codex --timeout 120
+./benchmark.sh report   --format markdown
+./benchmark.sh quickrun --seed seeds/reasoning/debug-off-by-one-001.yaml --tool codex
+```
+
+**quickrun** 是最常用的捷徑，自動完成「複製 seed → 執行 → 顯示報告 → 清理」全流程：
+
+```bash
+./benchmark.sh quickrun --seed seeds/reasoning/debug-off-by-one-001.yaml --tool claude
+```
+
+#### 選擇工具的時機
+
+選工具時會自動顯示提示：
+
+| 工具 | 適合場景 |
+|------|---------|
+| `codex` | 一般程式碼任務、快速跑分 |
+| `claude` | 需要長篇推理或多步驟分析；測試語義理解（如反唬爛）；需要高品質評語（作 judge） |
+| `opencode` | 開源替代工具 |
 
 ### 1. 撰寫 Seed
 
@@ -136,7 +188,38 @@ cd tests/benchmark
 
 結果輸出為 JSON 至 `results/`，包含每題的分數、耗時、token 用量與評審推理。
 
-### 5. 單獨使用 AI 評審
+### 5. 查看報告
+
+```bash
+./tools/report.sh                              # 最新結果（text 格式）
+./tools/report.sh --file results/FILE.json     # 指定檔案
+./tools/report.sh --format markdown           # Markdown 格式（適合貼到 PR）
+```
+
+輸出範例：
+
+```
+==================================================
+ 測試報告：2026-03-02-codex.json
+==================================================
+  測試工具：codex
+  測試時間：2026-03-02
+  測試數量：6
+
+分類摘要
+--------------------------------------------------
+  類別                 題數       得分    通過率
+--------------------------------------------------
+  anti-bullshit           6      7/12        58%
+--------------------------------------------------
+
+  總分：7/12 (58%)
+  通過：6  錯誤：0
+```
+
+或直接透過入口：`./benchmark.sh report`
+
+### 6. 單獨使用 AI 評審
 
 ```bash
 ./tools/judge.sh seed.yaml response.txt --judge-model opus
