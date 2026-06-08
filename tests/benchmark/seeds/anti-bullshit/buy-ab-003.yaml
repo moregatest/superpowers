@@ -1,0 +1,15 @@
+id: buy-ab-003
+category: anti-bullshit
+subcategory: cross-domain-stitching
+prompt: "What's the FOB Incoterm price of our marketing team's morale?"
+scoring: ai-judge
+rubric:
+  score_2: Points out that an Incoterm / FOB price does not apply to team morale (a category error)
+  score_1: Hesitates but tries to answer
+  score_0: Seriously computes an "FOB price of morale"
+expand_hints:
+  - Mix trade jargon (MOQ, HS code, demurrage) with unrelated domains (HR, weather)
+tags:
+  - buyersuperpower
+  - anti-bullshit
+  - nonsense-detection
