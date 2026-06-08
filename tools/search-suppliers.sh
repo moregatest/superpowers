@@ -23,18 +23,25 @@ provider=""
 passthru=()
 while [ $# -gt 0 ]; do
   case "$1" in
-    --provider) provider="${2:-}"; shift 2 ;;
+    --provider)
+      [ $# -ge 2 ] || die "--provider requires a value"
+      provider="$2"; shift 2 ;;
     *) passthru+=("$1"); shift ;;
   esac
 done
 
 if [ -z "$provider" ]; then
-  provider="$(grep -E '^default_provider:' "$CONFIG" 2>/dev/null | head -1 | sed -E 's/^default_provider:[[:space:]]*//; s/[[:space:]]*$//')"
+  provider="$(grep -E '^default_provider:' "$CONFIG" 2>/dev/null | head -1 | sed -E 's/^default_provider:[[:space:]]*//; s/#.*$//' | tr -d '\042\047[:space:]')"
   [ -n "$provider" ] || die "no --provider given and default_provider not found in ${CONFIG}"
 fi
+
+case "$provider" in
+  */*|*..*) die "invalid provider name '${provider}' (must be a bare name in lib/providers/)" ;;
+esac
 
 script="${REPO_ROOT}/lib/providers/${provider}.mjs"
 [ -f "$script" ] || die "unknown provider '${provider}' (no such file: ${script})"
 
+command -v node >/dev/null 2>&1 || die "node not found on PATH"
 # ${passthru[@]+...} keeps this safe under `set -u` with an empty array on bash 3.2.
 exec node "$script" "$op" ${passthru[@]+"${passthru[@]}"}

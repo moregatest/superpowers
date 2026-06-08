@@ -17,11 +17,17 @@ echo "$OUT" | jq -e '.provider=="mock" and (.suppliers|type=="array")' >/dev/nul
 OUT=$(tools/search-suppliers.sh search --criteria "$TMP/criteria.json") || fail "search exited non-zero"
 echo "$OUT" | jq -e '.provider=="mock" and (.suppliers|length==3)' >/dev/null || fail "search: not mock contract JSON"
 
-# --provider override is honored
+# default provider is mock (from config)
 echo "$OUT" | jq -e '.provider=="mock"' >/dev/null || fail "default provider should be mock"
+
+# --provider override routes away from the mock default
+OVR=$(tools/search-suppliers.sh search --provider readymarket-api --criteria "$TMP/criteria.json") || fail "override exited non-zero"
+echo "$OVR" | jq -e '.provider=="readymarket-api"' >/dev/null || fail "--provider override not honored"
 
 # bad op rejected
 if tools/search-suppliers.sh frobnicate --criteria "$TMP/criteria.json" >/dev/null 2>&1; then fail "bad op should exit non-zero"; fi
 # unknown provider rejected
 if tools/search-suppliers.sh search --provider nope --criteria "$TMP/criteria.json" >/dev/null 2>&1; then fail "unknown provider should exit non-zero"; fi
+# dangling --provider (no value) must fail fast, not hang (regression: C1)
+if tools/search-suppliers.sh search --provider >/dev/null 2>&1; then fail "dangling --provider should exit non-zero"; fi
 pass "dispatcher"
