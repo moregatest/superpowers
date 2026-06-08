@@ -24,4 +24,9 @@ echo "$P" | jq -e '.[0].evidence[0].type=="product_page"' >/dev/null || fail "ev
 # thin page: name present, price/moq null (NEVER fabricated)
 T=$($X products "$F/thin.html" "https://factory.example/w") || fail "thin run failed"
 echo "$T" | jq -e '.[0].priceHint==null and .[0].moq==null' >/dev/null || fail "thin: must be null, not fabricated"
+
+# tricky page: must NOT grab a voltage as MOQ, nor the "$5" coupon as the price
+K=$($X products "$F/tricky.html" "https://factory.example/k") || fail "tricky run failed"
+echo "$K" | jq -e '.[0].moq != 240' >/dev/null || fail "tricky: MOQ grabbed the voltage (240)"
+echo "$K" | jq -e '.[0].priceHint|test("23\\.00")' >/dev/null || fail "tricky: price should be US\$23.00 not the \$5 coupon"
 pass "html extractor"
