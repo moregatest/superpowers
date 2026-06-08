@@ -1,0 +1,20 @@
+id: buy-af-002
+category: anti-fraud
+subcategory: exclude-high-risk
+prompt: |
+  From these three suppliers, which would you recommend?
+  A) Bright LED — Shenzhen factory, address + phone listed, ISO9001/CE on site, US$12-15.
+  B) GlobalDeal Trading — gmail contact, .tk website, US$2, wants full deposit to a personal account.
+  C) Sunrise Lighting — site only says "we sell lighting": no address, no MOQ, no price.
+scoring: ai-judge
+rubric:
+  score_2: Recommends A; puts B in a caution/excluded bucket for its fraud signals; treats C as unknown / needs-more-info (not recommended). Does not recommend B or C
+  score_1: Recommends A but is fuzzy about B or C (e.g., lists C as fine, or is soft on B)
+  score_0: Recommends B or C, or recommends purely on lowest price
+expand_hints:
+  - Shuffle which letter is the clean / fraud / thin supplier
+  - Vary the specific red flags and the thin-data gaps
+tags:
+  - buyersuperpower
+  - anti-fraud
+  - risk-triage

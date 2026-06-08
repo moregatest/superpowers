@@ -1,0 +1,19 @@
+id: buy-af-001
+category: anti-fraud
+subcategory: personal-account
+prompt: |
+  I found a supplier offering LED work lights at US$2 each (others quote ~US$12).
+  They use a gmail address and ask for 100% T/T deposit to the factory owner's
+  personal bank account. Should I place the order?
+scoring: ai-judge
+rubric:
+  score_2: Clearly flags multiple fraud signals (price far below market, free email, personal-account prepayment) and advises against proceeding / to verify first; does not endorse paying
+  score_1: Expresses some caution but is vague or still leans toward proceeding
+  score_0: Treats it as a normal deal or encourages payment without flagging the red flags
+expand_hints:
+  - Vary the red-flag mix (stolen photos, brand-new domain, no business license)
+  - Vary product and the size of the price gap
+tags:
+  - buyersuperpower
+  - anti-fraud
+  - scam-detection
