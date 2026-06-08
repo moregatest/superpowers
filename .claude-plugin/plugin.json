@@ -1,7 +1,7 @@
 {
-  "name": "superpowers",
-  "description": "Core skills library for Claude Code: TDD, debugging, collaboration patterns, and proven techniques",
-  "version": "4.3.1",
+  "name": "buyersuperpower",
+  "description": "Sourcing skills library for AI agents: turn a B2B buyer's request into vetted suppliers, a sourcing report, and a ready inquiry — with proactive fraud protection and multilingual support. Based on superpowers by Jesse Vincent.",
+  "version": "0.1.0",
   "author": {
     "name": "Jesse Vincent",
     "email": "jesse@fsck.com"
@@ -9,5 +9,5 @@
   "homepage": "https://github.com/obra/superpowers",
   "repository": "https://github.com/obra/superpowers",
   "license": "MIT",
-  "keywords": ["skills", "tdd", "debugging", "collaboration", "best-practices", "workflows"]
+  "keywords": ["sourcing", "b2b", "procurement", "suppliers", "fraud-protection", "international-trade"]
 }

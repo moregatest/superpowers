@@ -1,8 +1,8 @@
 {
-  "name": "superpowers",
-  "displayName": "Superpowers",
-  "description": "Core skills library: TDD, debugging, collaboration patterns, and proven techniques",
-  "version": "4.3.1",
+  "name": "buyersuperpower",
+  "displayName": "buyersuperpower",
+  "description": "Sourcing skills library: vetted suppliers, sourcing reports, ready inquiries — fraud protection + multilingual",
+  "version": "0.1.0",
   "author": {
     "name": "Jesse Vincent",
     "email": "jesse@fsck.com"
@@ -10,7 +10,7 @@
   "homepage": "https://github.com/obra/superpowers",
   "repository": "https://github.com/obra/superpowers",
   "license": "MIT",
-  "keywords": ["skills", "tdd", "debugging", "collaboration", "best-practices", "workflows"],
+  "keywords": ["sourcing", "b2b", "procurement", "suppliers", "fraud-protection", "international-trade"],
   "skills": "./skills/",
   "agents": "./agents/",
   "commands": "./commands/",

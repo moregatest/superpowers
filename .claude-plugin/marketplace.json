@@ -1,15 +1,15 @@
 {
-  "name": "superpowers-dev",
-  "description": "Development marketplace for Superpowers core skills library",
+  "name": "buyersuperpower-dev",
+  "description": "Development marketplace for the buyersuperpower sourcing skills library",
   "owner": {
     "name": "Jesse Vincent",
     "email": "jesse@fsck.com"
   },
   "plugins": [
     {
-      "name": "superpowers",
-      "description": "Core skills library for Claude Code: TDD, debugging, collaboration patterns, and proven techniques",
-      "version": "4.3.1",
+      "name": "buyersuperpower",
+      "description": "Sourcing skills library for AI agents: vetted suppliers, sourcing reports, ready inquiries — with fraud protection and multilingual support",
+      "version": "0.1.0",
       "source": "./",
       "author": {
         "name": "Jesse Vincent",
