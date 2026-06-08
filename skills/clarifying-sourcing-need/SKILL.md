@@ -21,6 +21,6 @@ Never search on a vague request. Pin down the buying criteria first — **one qu
 
 A compact criteria record to hand to `finding-suppliers`:
 
-`{ product, keywords[], destinationCountry, sourceCountries[], moq, certs[], targetPrice{min,max,currency} }`
+`{ product, keywords[], destinationCountry, sourceCountries[], moq, certs[], targetPrice{min,max,currency}, leadTime }`
 
 Stop asking once you have enough to search. Don't interrogate.

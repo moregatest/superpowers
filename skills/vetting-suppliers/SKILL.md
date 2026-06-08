@@ -28,7 +28,7 @@ Before any supplier is shown to the buyer as recommended, screen it. Protecting 
 |-----------|------------|
 | low | Yes |
 | medium | Yes, but flag the open items to confirm |
-| high | No — only in the "⚠️ caution / excluded" section, with reasons |
+| high | No — only in the "⚠️ Caution / excluded" section, with reasons |
 | unknown | No — excluded unless the buyer explicitly asks for manual follow-up |
 
 Always attach **evidence** (source page URL + snippet) for every signal you cite.
