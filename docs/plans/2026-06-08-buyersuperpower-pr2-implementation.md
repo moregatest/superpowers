@@ -25,7 +25,7 @@
 
 **Reuse (unchanged):** `tests/buyersuperpower/assert.sh` (PR1 helpers).
 
-**Out of scope for PR2 (later PRs):** `lib/providers/playwright-search.mjs` and `package.json` (PR4); benchmark seed retarget (PR3); any real network/scraping or real Ready Market API.
+**Out of scope for PR2 (later PRs):** `lib/providers/playwright.mjs` and `package.json` (PR4); benchmark seed retarget (PR3); any real network/scraping or real Ready Market API.
 
 **Provider contract (design §5.3) — the JSON every provider emits to stdout:**
 ```jsonc
@@ -436,7 +436,7 @@ Expected: both `jq -e` print `true` and exit 0 (each supplier and product carrie
 - [ ] **Step 3: Confirm no PR4/network scope crept in**
 
 Run: `ls lib/providers/ && ! test -f package.json && echo "no package.json (correct for PR2)"`
-Expected: lists `mock.mjs` and `readymarket-api.mjs` only (no `playwright-search.mjs`); prints the no-package.json confirmation.
+Expected: lists `mock.mjs` and `readymarket-api.mjs` only (no `playwright.mjs`); prints the no-package.json confirmation.
 
 ---
 
@@ -455,4 +455,4 @@ Expected: lists `mock.mjs` and `readymarket-api.mjs` only (no `playwright-search
 
 **Type/contract consistency:** The contract shape (`provider`, `suppliers[]` with `name/officialSite/evidence[]/products[]`, each product with `evidence[]`, `notes`) is identical across mock output (Task 1), the dispatcher tests (Task 2), the stub (Task 3, empty `suppliers[]` is a valid instance), and the design §5.3. The dispatcher CLI (`<op> [--provider] [--criteria] [--urls]`) matches what every test invokes and what `finding-suppliers` (PR1) references (`search-suppliers.sh extract --urls … --criteria …`). ✅
 
-**Scope:** No `playwright-search.mjs`, no `package.json`, no network — all deferred to PR4 and asserted absent in Task 4 Step 3. ✅
+**Scope:** No `playwright.mjs`, no `package.json`, no network — all deferred to PR4 and asserted absent in Task 4 Step 3. ✅

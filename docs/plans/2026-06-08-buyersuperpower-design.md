@@ -57,7 +57,7 @@
         │ finding／vetting 會呼叫 ↓
         ▼
 [工具／資料層（新增）]
- tools/search-suppliers.sh ──選 provider──► playwright-search.mjs（預設：開瀏覽器抽官網商品）
+ tools/search-suppliers.sh ──選 provider──► playwright.mjs（預設：開瀏覽器抽官網商品）
                                           ├► mock.mjs（測試：回罐頭候選）
                                           └► readymarket-api.mjs（未來：查 Ready Market DB）
  統一輸入／輸出 JSON 契約；skill 只認契約，換後端不改 skill
@@ -146,7 +146,7 @@
 > **每筆 supplier／product 都帶 `evidence`（來源頁面 ＋ 原文片段）** → 支撐 anti-bullshit／anti-fraud 評分，並讓採購建議文件可查證。抽不到就不要硬填。
 
 ### 5.4 providers
-- `lib/providers/playwright-search.mjs`（**預設**，**首期只實作 `extract`**；不做 `search`／`discover`——discovery 由 agent 的 web 搜尋負責，避免把搜尋品質與爬站品質綁在一起、也降低跨平台風險）
+- `lib/providers/playwright.mjs`（**預設**，**首期只實作 `extract`**；不做 `search`／`discover`——discovery 由 agent 的 web 搜尋負責，避免把搜尋品質與爬站品質綁在一起、也降低跨平台風險）
 - `lib/providers/mock.mjs`（**測試**，回罐頭，實作 `extract` ＋ `search`）
 - `lib/providers/readymarket-api.mjs`（**未來 stub**，實作 `search`）
 
@@ -203,7 +203,7 @@ discovery:
 ## 9. 首期 repo 變更清單（交給 writing-plans）
 
 - **ADD**　`skills/{using-buyersuperpower, clarifying-sourcing-need, finding-suppliers, vetting-suppliers, placing-order}/SKILL.md`
-- **ADD**　`lib/providers/{playwright-search.mjs, mock.mjs, readymarket-api.mjs}`、`tools/search-suppliers.sh`、`tools/providers.config.yaml`、`package.json`（playwright 依賴）
+- **ADD**　`lib/providers/{playwright.mjs, mock.mjs, readymarket-api.mjs}`、`tools/search-suppliers.sh`、`tools/providers.config.yaml`、`package.json`（playwright 依賴）
 - **RETARGET**　`hooks/session-start`（注入 using-buyersuperpower）、`.claude-plugin/plugin.json`＋`marketplace.json`、`.cursor-plugin/plugin.json`、`.codex/INSTALL.md`、`.opencode/*`（改名 buyersuperpower、版本 0.1.0）
 - **RETARGET**　`tests/benchmark/seeds/`（buyer 類別 ＋ mock provider 跑得動的 sourcing 情境）
 - **KEEP**　`skills/writing-skills`（authoring）、`tests/benchmark/tools/`、`lib/skills-core.js`
@@ -266,7 +266,7 @@ discovery:
 - benchmark 全跑 **mock** provider → skill 行為可 RED→GREEN，不被真站結構／網路不穩拖住
 
 **PR 4 — Playwright extract provider**
-- ADD `lib/providers/playwright-search.mjs`、`package.json`、本地 fixture HTML 測試、timeout／retry／rate-limit
+- ADD `lib/providers/playwright.mjs`、`package.json`、本地 fixture HTML 測試、timeout／retry／rate-limit
 
 > 順序理由：skills → mock provider → benchmark(on mock) → Playwright。benchmark 只依賴 mock，故排在 Playwright 前。
 

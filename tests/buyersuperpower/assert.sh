@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Tiny assertion helpers for buyersuperpower PR1 tests.
+# Tiny assertion helpers for buyersuperpower tests.
 set -uo pipefail
 
 fail() { echo "ASSERT FAIL: $1" >&2; exit 1; }
