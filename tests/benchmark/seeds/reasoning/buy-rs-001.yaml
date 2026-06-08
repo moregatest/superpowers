@@ -1,0 +1,21 @@
+id: buy-rs-001
+category: reasoning
+subcategory: landed-cost
+prompt: |
+  Compute the landed cost per unit. Show your steps.
+  - 500 units at US$12.00/unit, FOB Shenzhen
+  - Ocean freight: US$800 total
+  - Marine insurance: US$50 total
+  - Import duty: 5% of goods value
+scoring: ai-judge
+rubric:
+  score_2: "Correct: goods 6000, duty 300, freight 800, insurance 50 => total 7150 => US$14.30/unit, with clear steps"
+  score_1: Right method but an arithmetic slip, or omits one cost component
+  score_0: Wrong method (e.g., ignores duty or freight) or wrong result
+expand_hints:
+  - Vary unit price / quantity / duty rate / freight
+  - Add components (customs broker fee, last-mile delivery)
+tags:
+  - buyersuperpower
+  - reasoning
+  - landed-cost

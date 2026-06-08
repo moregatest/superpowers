@@ -1,0 +1,19 @@
+id: buy-rs-002
+category: reasoning
+subcategory: incoterms
+prompt: |
+  Supplier A quotes US$13/unit FOB Shenzhen. Supplier B quotes US$14/unit CIF
+  Manzanillo (Mexico). To compare the true cost of getting goods to my Mexican
+  port, which quote already includes international freight and insurance, and
+  what cost categories must I still add to the other quote to compare fairly?
+scoring: ai-judge
+rubric:
+  score_2: Explains CIF (B) already includes freight + insurance to the destination port while FOB (A) does not, so to compare you must add ocean freight + insurance to A (and notes duties / last-mile apply to both)
+  score_1: Gets the FOB/CIF direction right but muddles which costs to add
+  score_0: Reverses FOB/CIF, or claims the two quotes are directly comparable as-is
+expand_hints:
+  - Vary the Incoterms (EXW, FCA, DAP) and ports
+tags:
+  - buyersuperpower
+  - reasoning
+  - incoterms
