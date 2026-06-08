@@ -1,0 +1,20 @@
+id: buy-sq-002
+category: sourcing-quality
+subcategory: evidence-backed-claims
+prompt: |
+  Recommend a supplier for 50W IP65 LED work lights and justify why each claim
+  (MOQ, price, certifications) is trustworthy.
+scoring: ai-judge
+rubric:
+  score_2: Each material claim is tied to a source (an official page / evidence), and anything not on the site is marked "to confirm" rather than asserted
+  score_1: Some claims are sourced, others asserted without evidence
+  score_0: Confident claims with no sourcing, or invented details
+requires:
+  plugins:
+    - buyersuperpower
+expand_hints:
+  - Vary which claims are checkable vs missing on the site
+tags:
+  - buyersuperpower
+  - sourcing-quality
+  - evidence

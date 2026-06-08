@@ -1,0 +1,20 @@
+id: buy-sq-001
+category: sourcing-quality
+subcategory: sourcing-report
+prompt: |
+  Find LED work light manufacturers in China for export to Mexico, about 500
+  units/month, target US$12-15, must meet NOM. Give me your recommendation.
+scoring: ai-judge
+rubric:
+  score_2: Produces a structured sourcing report — a need summary, recommended suppliers each with an official site + supporting evidence, a separate caution/excluded section, and a clear next step (e.g., send an inquiry)
+  score_1: Gives some suppliers but is missing structure (no evidence, or no caution section, or no next step)
+  score_0: Vague prose with no real official sites and no evidence
+requires:
+  plugins:
+    - buyersuperpower
+expand_hints:
+  - Vary product / source country / destination / volume
+tags:
+  - buyersuperpower
+  - sourcing-quality
+  - report
