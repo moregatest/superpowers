@@ -85,7 +85,7 @@
 - **流程**：
   1. 用 agent 的 **web 搜尋工具**找供應商**官網**（過濾掉 alibaba / made-in-china / globalsources 等平台與目錄；必要時用來源國語言加搜）
   2. 呼叫 `tools/search-suppliers.sh extract --urls <清單> --criteria <json>` → **Playwright** 開官網抽**有潛力商品**
-  3. 對每個官網呼叫 `vetting-suppliers`
+  3. **套用 `vetting-suppliers` 規則**（不寫死成「呼叫另一個 skill」——而是「**推薦任何供應商前，必須載入並套用 vetting-suppliers**」，因各平台 skill 互叫能力不一）
   4. 判斷「有潛力」＝符合規格／MOQ／價格區間
   5. 整理成**採購建議文件**（見 §6）
 - **輸出**：採購建議文件（markdown），呈現給買家
@@ -94,7 +94,16 @@
 - **description**：Use before recommending or contacting any supplier — verify legitimacy and screen for fraud signals
 - **紅旗**：無實體地址、只用免費信箱、網域剛註冊、價格低到不合理、無營業執照／認證、盜圖、要求全額 T/T 匯個人帳戶
 - **工具**：Playwright 拉官網 about／contact／cert 頁；網域年齡（whois，可選）
-- **輸出**：每家 `{ riskLevel: low|medium|high, signals[], reasons[] }`；**high 風險不進推薦，改進「⚠️謹慎／已排除」區**
+- **輸出**：每家 `{ riskLevel: low|medium|high|unknown, confidence: low|medium|high, signals[], reasons[] }`
+  - `confidence` 與 `riskLevel` 分離：官網資訊不足 ≠ 詐騙，但 confidence 低就**不能當 low risk 推薦**
+- **推薦決策矩陣**：
+
+  | riskLevel | 進推薦區？ |
+  |---|---|
+  | low | ✅ 可進推薦 |
+  | medium | ✅ 可進推薦，**但必須標示待確認事項** |
+  | high | ❌ 只進「⚠️謹慎／已排除」 |
+  | unknown | ❌ 不進推薦，**除非買家明確要求人工追查** |
 
 ### 4.4 `placing-order`（協助發起下單）
 - **description**：Use when the buyer wants to proceed with a shortlisted supplier — initiate contact, send an inquiry / RFQ, or move toward an order
@@ -125,14 +134,19 @@
   "suppliers": [
     { "name": "...", "officialSite": "https://...", "country": "CN",
       "companyInfo": "...",
+      "evidence": [ { "type": "contact_page", "url": "https://...", "text": "..." },
+                    { "type": "cert_page",    "url": "https://...", "text": "..." } ],
       "products": [ { "name": "...", "specs": {}, "moq": 500,
-                      "priceHint": "...", "url": "https://...", "image": "https://..." } ],
+                      "priceHint": "...", "url": "https://...", "image": "https://...",
+                      "evidence": [ { "type": "product_page", "url": "https://...", "text": "..." } ] } ],
       "extractionNotes": "..." } ],
   "notes": "..." }
 ```
 
+> **每筆 supplier／product 都帶 `evidence`（來源頁面 ＋ 原文片段）** → 支撐 anti-bullshit／anti-fraud 評分，並讓採購建議文件可查證。抽不到就不要硬填。
+
 ### 5.4 providers
-- `lib/providers/playwright-search.mjs`（**預設**，實作 `extract`；可選 `discover`）
+- `lib/providers/playwright-search.mjs`（**預設**，**首期只實作 `extract`**；不做 `search`／`discover`——discovery 由 agent 的 web 搜尋負責，避免把搜尋品質與爬站品質綁在一起、也降低跨平台風險）
 - `lib/providers/mock.mjs`（**測試**，回罐頭，實作 `extract` ＋ `search`）
 - `lib/providers/readymarket-api.mjs`（**未來 stub**，實作 `search`）
 
@@ -166,7 +180,7 @@ discovery:
 |---|---|
 | Playwright 被官網擋／逾時 | 每站 timeout ＋ 重試一次、站間 rate-limit、換 UA；擋掉就記「無法擷取，附 URL 供人工查」，**不讓單站失敗拖垮整批** |
 | 搜不到官網（結果全是平台） | 誠實說明 → 提議放寬關鍵字／用來源國語言再搜／問買家能否接受平台賣家；**絕不捏造供應商** |
-| 可疑供應商 | 命中紅旗 → **不進推薦，改進「⚠️謹慎／已排除」區並附原因** |
+| 可疑／資訊不足供應商 | 依 §4.3 推薦決策矩陣：**high／unknown 不進推薦**；medium 進推薦但標示待確認；一律附原因與 `evidence` |
 | 官網找不到規格／價格／MOQ | 寫「官網未提供」，**不猜不編**（反唬爛） |
 | 語言偵測不確定 | 直接問買家用哪個語言；關鍵術語一律雙語 |
 | 下單前 | 明示「詢價非綁定」；**不自動付款**、不外洩買家資料；聯絡供應商前要買家明確確認 |
@@ -195,9 +209,12 @@ discovery:
 - **KEEP**　`skills/writing-skills`（authoring）、`tests/benchmark/tools/`、`lib/skills-core.js`
 - **DEFER（後續切片）**　刪除／封存其餘 dev skill；`comparing-quotes` 及下游（議價／條件／驗貨／物流／爭議）；`readymarket-api` 實作
 
+> **PR 切分、落地順序、Definition of Done 見 §13。** 首期 = PR1（先交付）。
+
 ## 10. 不在首期範圍（YAGNI）
 - `comparing-quotes` 及下游 buyer skill（比價要等供應商回詢價才做）
 - Ready Market API provider 實作（只留 stub ＋ 契約）
+- Playwright 的 `search`／`discover`（首期 Playwright 只 `extract`；discovery 由 agent web 搜尋）
 - 刪除其餘 superpowers dev skill（先共存，bootstrap 只導向 buyer skill；風險低，留待清理切片）
 - 真的下單付款（首期只到詢價／採購意向）
 
@@ -225,3 +242,48 @@ discovery:
 - 官網結構各異 → 抽取需通用啟發式（標題／規格表／價格樣式）＋ 容錯；首期先求「找到產品頁與連結」，規格盡力而為
 - 跨平台 web 搜尋工具不一（Claude Code 有 WebSearch；其他平台需對應）→ 文件化工具映射
 - 多語言品質依賴模型本身
+
+## 13. 實作順序 · PR 切分 · Definition of Done
+
+### 13.1 PR 切分（每個都是可交付 PR，依賴遞增）
+
+**PR 1 — buyersuperpower 身份與 skill 骨架（首期先交付這個）**
+- ADD `skills/{using-buyersuperpower, clarifying-sourcing-need, finding-suppliers, vetting-suppliers, placing-order}/SKILL.md`
+- RETARGET `hooks/session-start`（注入 using-buyersuperpower）
+- RETARGET plugin metadata（`.claude-plugin/plugin.json`＋`marketplace.json`、`.cursor-plugin/plugin.json`、`.codex/INSTALL.md`、`.opencode/*`，改名 buyersuperpower、版本 0.1.0）
+- **順序**：先 bootstrap（using-buyersuperpower ＋ hooks ＋ metadata）→ 再 4 個 skill，優先序 `clarifying-sourcing-need → vetting-suppliers → finding-suppliers → placing-order`（finding 依賴前兩者、placing 最後才需要）
+- **驗收**：session-start 注入成功；買家母語回覆；主動防詐；未確認不聯絡供應商
+
+**PR 2 — provider 契約與 mock**
+- ADD `tools/search-suppliers.sh`、`tools/providers.config.yaml`、`lib/providers/mock.mjs`、`lib/providers/readymarket-api.mjs`（stub）、provider 契約測試
+- **驗收**：下列兩條穩定輸出 §5.3 JSON（含 `evidence`）：
+  - `tools/search-suppliers.sh extract --urls urls.json --criteria criteria.json`
+  - `tools/search-suppliers.sh search --criteria criteria.json`
+
+**PR 3 — benchmark seed 改造（全吃 mock）**
+- RETARGET `tests/benchmark/seeds/`：ADD `sourcing-compliance`、`anti-fraud`；RETARGET `anti-bullshit`、`sourcing-quality`、`reasoning`
+- 每類 2–3 筆；最重要前三類
+- benchmark 全跑 **mock** provider → skill 行為可 RED→GREEN，不被真站結構／網路不穩拖住
+
+**PR 4 — Playwright extract provider**
+- ADD `lib/providers/playwright-search.mjs`、`package.json`、本地 fixture HTML 測試、timeout／retry／rate-limit
+
+> 順序理由：skills → mock provider → benchmark(on mock) → Playwright。benchmark 只依賴 mock，故排在 Playwright 前。
+
+### 13.2 Playwright 首期範圍（PR 4，不要做太聰明）
+- 輸入官網 URL → 抓首頁 → 找 `product / products / catalog / solutions` 類連結 → **最多走 5 頁**
+- 抽 `title / h1 / h2 / table / price-like text / MOQ-like text / image`
+- 輸出符合 §5.3 契約的 suppliers JSON
+- 首期目標＝「**找到產品頁與連結**」；規格／MOQ／價格**有就抽，沒有就明確 `null` 或「官網未提供」**，不捏造
+
+### 13.3 Definition of Done（首期完成標準）
+1. session-start 成功注入 using-buyersuperpower
+2. 買家用中文或西文詢問採購需求時，agent 用**買家語言**回覆
+3. criteria 不完整時，agent **先問問題**，不直接搜
+4. criteria 完整時，agent 找官網並**排除平台型結果**
+5. mock provider 可回供應商與商品 JSON（**含 evidence**）
+6. `finding-suppliers` 產出完整採購建議文件
+7. 推薦前**一定有 vetting 結果**
+8. **high／unknown risk** 供應商只出現在謹慎／已排除區
+9. 官網沒有 MOQ／price／cert 時**不捏造**
+10. `placing-order` 只產生英文 RFQ 草稿，**不自動聯絡、不自動付款**
