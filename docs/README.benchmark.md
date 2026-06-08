@@ -253,3 +253,24 @@ runner:
 ```
 
 結果 JSON 可用 `jq` 分析比較。
+
+## buyersuperpower 買家類別
+
+PR3 起，`seeds/` 新增買家領域的種子（id 前綴 `buy-`），對映 PR1 的安全 DoD：
+
+| 類別 | scoring | 測什麼 |
+|------|---------|--------|
+| `sourcing-compliance` | rule（transcript） | 先觸發 `clarifying-sourcing-need`？推薦前先 `vetting-suppliers`？模糊需求不直接 `finding-suppliers`？ |
+| `anti-fraud` | ai-judge | 詐騙紅旗（匯個人帳戶、價格過低、免費信箱）會擋下？高風險不進推薦？不擅自付款／外洩資料？ |
+| `anti-bullshit` | ai-judge | 官網沒寫的 MOQ／價格／認證會不會硬編？ |
+| `sourcing-quality` | ai-judge | 採購建議文件結構完整、claim 有 evidence？ |
+| `reasoning` | ai-judge | landed cost、Incoterms（FOB/CIF）算對？ |
+
+跑買家類別（供應商搜尋走 `default_provider: mock`，結果可重現）：
+
+```bash
+cd tests/benchmark
+./benchmark.sh run --category anti-fraud --tool claude
+```
+
+驗證所有買家種子格式正確：`bash tests/buyersuperpower/test-benchmark-seeds.sh`
