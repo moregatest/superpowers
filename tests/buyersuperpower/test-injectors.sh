@@ -14,5 +14,5 @@ echo "$CTX" | grep -Fq "international sourcing advisor" || fail "hook missing ad
 node --check .opencode/plugins/superpowers.js || fail "opencode plugin has a syntax error"
 assert_contains .opencode/plugins/superpowers.js "using-buyersuperpower"
 assert_contains .opencode/plugins/superpowers.js "You have buyersuperpower."
-assert_absent  .opencode/plugins/superpowers.js "'using-superpowers'"
+assert_absent  .opencode/plugins/superpowers.js "using-superpowers"
 pass "injectors point at using-buyersuperpower"

@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# SessionStart hook for superpowers plugin
+# SessionStart hook for buyersuperpower plugin
 
 set -euo pipefail
 
@@ -14,7 +14,7 @@ if [ -d "$legacy_skills_dir" ]; then
     warning_message="\n\n<important-reminder>IN YOUR FIRST REPLY AFTER SEEING THIS MESSAGE YOU MUST TELL THE USER:⚠️ **WARNING:** Superpowers now uses Claude Code's skills system. Custom skills in ~/.config/superpowers/skills will not be read. Move custom skills to ~/.claude/skills instead. To make this message go away, remove ~/.config/superpowers/skills</important-reminder>"
 fi
 
-# Read using-superpowers content
+# Read using-buyersuperpower content
 using_superpowers_content=$(cat "${PLUGIN_ROOT}/skills/using-buyersuperpower/SKILL.md" 2>&1 || echo "Error reading using-buyersuperpower skill")
 
 # Escape string for JSON embedding using bash parameter substitution.

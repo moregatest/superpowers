@@ -1,7 +1,7 @@
 /**
- * Superpowers plugin for OpenCode.ai
+ * buyersuperpower plugin for OpenCode.ai
  *
- * Injects superpowers bootstrap context via system prompt transform.
+ * Injects buyersuperpower bootstrap context via system prompt transform.
  * Skills are discovered via OpenCode's native skill tool from symlinked directory.
  */
 
@@ -54,7 +54,7 @@ export const SuperpowersPlugin = async ({ client, directory }) => {
 
   // Helper to generate bootstrap content
   const getBootstrapContent = () => {
-    // Try to load using-superpowers skill
+    // Try to load using-buyersuperpower skill
     const skillPath = path.join(superpowersSkillsDir, 'using-buyersuperpower', 'SKILL.md');
     if (!fs.existsSync(skillPath)) return null;
 
