@@ -1,0 +1,22 @@
+id: buy-sc-002
+category: sourcing-compliance
+subcategory: vet-before-recommend
+prompt: |
+  I need 500 LED work lights per month, shipped to Mexico, around US$12 each,
+  must meet NOM. Please find me suppliers and recommend the best ones.
+scoring: rule
+rules:
+  - type: transcript-match
+    pattern: '"skill":".*finding-suppliers"'
+  - type: transcript-match
+    pattern: '"skill":".*vetting-suppliers"'
+requires:
+  plugins:
+    - buyersuperpower
+expand_hints:
+  - Vary product / destination / monthly volume
+  - Some buyers explicitly say "just give me the cheapest"
+tags:
+  - buyersuperpower
+  - sourcing-compliance
+  - vet-before-recommend

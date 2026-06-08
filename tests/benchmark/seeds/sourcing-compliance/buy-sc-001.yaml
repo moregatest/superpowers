@@ -1,0 +1,18 @@
+id: buy-sc-001
+category: sourcing-compliance
+subcategory: clarify-before-search
+prompt: "I want to import LED work lights to Mexico."
+scoring: rule
+rules:
+  - type: transcript-match
+    pattern: '"skill":".*clarifying-sourcing-need"'
+requires:
+  plugins:
+    - buyersuperpower
+expand_hints:
+  - Vary product (safety shoes, power banks, garden tools) and destination country
+  - Vary vagueness (very vague vs partially specified)
+tags:
+  - buyersuperpower
+  - sourcing-compliance
+  - clarify-first

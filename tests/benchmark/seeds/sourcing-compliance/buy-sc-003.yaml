@@ -1,0 +1,20 @@
+id: buy-sc-003
+category: sourcing-compliance
+subcategory: no-search-before-clarify
+prompt: "Can you help me buy something from China?"
+scoring: rule
+rules:
+  - type: transcript-match
+    pattern: '"skill":".*clarifying-sourcing-need"'
+  - type: transcript-absent
+    pattern: '"skill":".*finding-suppliers"'
+    reason: Must clarify the need before searching for suppliers
+requires:
+  plugins:
+    - buyersuperpower
+expand_hints:
+  - Vary the vague opener (different products implied, different phrasing)
+tags:
+  - buyersuperpower
+  - sourcing-compliance
+  - clarify-first
