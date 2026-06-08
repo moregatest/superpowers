@@ -1,158 +1,66 @@
-# Superpowers
+# buyersuperpower
 
-Superpowers is a complete software development workflow for your coding agents, built on top of a set of composable "skills" and some initial instructions that make sure your agent uses them.
+**buyersuperpower turns your AI agent into an international sourcing advisor for B2B buyers.**
+
+Tell it what you want to source. It clarifies the need, finds real supplier *official sites*, screens them for fraud, hands you a sourcing report, and drafts your inquiry — in your language, and **without ever contacting a supplier or paying anyone without your say-so**.
+
+It's built on [Superpowers](https://github.com/obra/superpowers) (MIT, by Jesse Vincent): the same auto-triggering "skills" mechanism, retargeted from software development to international procurement.
+
+> **Status: early development.** The identity layer and the first four skills have shipped (PR1). Live supplier search (Playwright) and the evaluation benchmark land in later slices — see [Roadmap](#roadmap).
 
 ## How it works
 
-It starts from the moment you fire up your coding agent. As soon as it sees that you're building something, it *doesn't* just jump into trying to write code. Instead, it steps back and asks you what you're really trying to do. 
+The moment a session starts, a hook injects the `using-buyersuperpower` bootstrap, so your agent behaves as a sourcing advisor from the very first message. As you describe a buying need, it triggers the right skill automatically — you don't do anything special:
 
-Once it's teased a spec out of the conversation, it shows it to you in chunks short enough to actually read and digest. 
+1. **clarifying-sourcing-need** — pins down product & specs, quantity (MOQ), destination country, required certifications (CE / FCC / NOM / UKCA…), target price, and lead time. One question at a time, *before* searching.
+2. **finding-suppliers** — uses web search to find real manufacturer **official sites** (filtering out marketplaces and directories), extracts promising products, applies vetting, and produces a **sourcing report**.
+3. **vetting-suppliers** — screens every supplier for fraud (no physical address, free-email-only contact, brand-new domain, too-good-to-be-true prices, payment to a *personal* account…) and assigns a `riskLevel` + a separate `confidence`. High- or unknown-risk suppliers **never** reach your recommended list.
+4. **placing-order** — drafts an English inquiry / RFQ for the suppliers you choose. It **never** contacts anyone or pays anything without your explicit confirmation.
 
-After you've signed off on the design, your agent puts together an implementation plan that's clear enough for an enthusiastic junior engineer with poor taste, no judgement, no project context, and an aversion to testing to follow. It emphasizes true red/green TDD, YAGNI (You Aren't Gonna Need It), and DRY. 
+It detects the buyer's language and runs the whole conversation in it, shows key trade terms bilingually, and refuses to invent data a supplier's site doesn't actually state.
 
-Next up, once you say "go", it launches a *subagent-driven-development* process, having agents work through each engineering task, inspecting and reviewing their work, and continuing forward. It's not uncommon for Claude to be able to work autonomously for a couple hours at a time without deviating from the plan you put together.
+## Safety first (these buyers may be new to trade)
 
-There's a bunch more to it, but that's the core of the system. And because the skills trigger automatically, you don't need to do anything special. Your coding agent just has Superpowers.
+- **Clarify before acting** — no searching or recommending on a vague request.
+- **Protect proactively** — actively screen for fraud and warn you.
+- **Never invent** — "not stated on site", never a guessed MOQ or price.
+- **Confirm before outreach** — never contacts a supplier, sends an inquiry, or places an order without your explicit OK.
+- **Never auto-pays**, and never leaks your data.
 
+## What's inside (PR1)
 
-## Sponsorship
+- **Bootstrap:** `skills/using-buyersuperpower/` — the advisor persona, the five safety rules, the language rule, and the skill-trigger table.
+- **Skills:** `clarifying-sourcing-need`, `finding-suppliers`, `vetting-suppliers`, `placing-order`.
+- **Identity:** both injectors retargeted (the Claude Code / Cursor `hooks/session-start` and the OpenCode plugin); plugin metadata is `buyersuperpower 0.1.0` across Claude Code, Cursor, Codex, and OpenCode.
+- **Tests:** `tests/buyersuperpower/` — a structural suite that boots the hook, validates the manifests, and locks the safety-critical content of every skill.
 
-If Superpowers has helped you do stuff that makes money and you are so inclined, I'd greatly appreciate it if you'd consider [sponsoring my opensource work](https://github.com/sponsors/obra).
+Design and plan: [`docs/plans/2026-06-08-buyersuperpower-design.md`](docs/plans/2026-06-08-buyersuperpower-design.md) and [`docs/plans/2026-06-08-buyersuperpower-pr1-implementation.md`](docs/plans/2026-06-08-buyersuperpower-pr1-implementation.md).
 
-Thanks! 
+## Roadmap
 
-- Jesse
+The supplier search is designed as a **pluggable provider** behind one JSON contract, so the agent's skills never change when the backend does:
 
+- **PR2** — the provider contract + a `mock` provider (`tools/search-suppliers.sh`, `lib/providers/mock.mjs`) returning evidence-bearing supplier JSON, so skill behaviour can be tested without hitting the network.
+- **PR3** — retarget the benchmark seeds (`sourcing-compliance`, `anti-fraud`, `anti-bullshit`, `sourcing-quality`, `reasoning`), run on the mock provider, to verify the safety behaviours automatically.
+- **PR4** — the default **Playwright** provider: open official sites and extract products. A Ready Market supplier-data provider can later slot in behind the same contract.
 
 ## Installation
 
-**Note:** Installation differs by platform. Claude Code or Cursor have built-in plugin marketplaces. Codex and OpenCode require manual setup.
-
-
-### Claude Code (via Plugin Marketplace)
-
-In Claude Code, register the marketplace first:
+buyersuperpower is in active development and **not yet published as its own marketplace plugin**. For now, run it from this repository:
 
 ```bash
-/plugin marketplace add obra/superpowers-marketplace
+git clone https://github.com/moregatest/superpowers.git buyersuperpower
 ```
 
-Then install the plugin from this marketplace:
+- **Codex / OpenCode:** follow [`.codex/INSTALL.md`](.codex/INSTALL.md) or [`.opencode/INSTALL.md`](.opencode/INSTALL.md), pointing the clone at your local checkout. (Those docs still reference the upstream repo path until buyersuperpower is published separately.)
+- **Claude Code / Cursor:** load this directory as a local plugin. A public marketplace entry will come once the project graduates from early development.
 
-```bash
-/plugin install superpowers@superpowers-marketplace
-```
+Verify by starting a session and describing something to source (e.g. *"I want to import LED work lights to Mexico, ~500/month"*) — the agent should start asking clarifying questions rather than guessing.
 
-### Cursor (via Plugin Marketplace)
+## Credits
 
-In Cursor Agent chat, install from marketplace:
-
-```text
-/plugin-add superpowers
-```
-
-### Codex
-
-Tell Codex:
-
-```
-Fetch and follow instructions from https://raw.githubusercontent.com/obra/superpowers/refs/heads/main/.codex/INSTALL.md
-```
-
-**Detailed docs:** [docs/README.codex.md](docs/README.codex.md)
-
-### OpenCode
-
-Tell OpenCode:
-
-```
-Fetch and follow instructions from https://raw.githubusercontent.com/obra/superpowers/refs/heads/main/.opencode/INSTALL.md
-```
-
-**Detailed docs:** [docs/README.opencode.md](docs/README.opencode.md)
-
-### Verify Installation
-
-Start a new session in your chosen platform and ask for something that should trigger a skill (for example, "help me plan this feature" or "let's debug this issue"). The agent should automatically invoke the relevant superpowers skill.
-
-## The Basic Workflow
-
-1. **brainstorming** - Activates before writing code. Refines rough ideas through questions, explores alternatives, presents design in sections for validation. Saves design document.
-
-2. **using-git-worktrees** - Activates after design approval. Creates isolated workspace on new branch, runs project setup, verifies clean test baseline.
-
-3. **writing-plans** - Activates with approved design. Breaks work into bite-sized tasks (2-5 minutes each). Every task has exact file paths, complete code, verification steps.
-
-4. **subagent-driven-development** or **executing-plans** - Activates with plan. Dispatches fresh subagent per task with two-stage review (spec compliance, then code quality), or executes in batches with human checkpoints.
-
-5. **test-driven-development** - Activates during implementation. Enforces RED-GREEN-REFACTOR: write failing test, watch it fail, write minimal code, watch it pass, commit. Deletes code written before tests.
-
-6. **requesting-code-review** - Activates between tasks. Reviews against plan, reports issues by severity. Critical issues block progress.
-
-7. **finishing-a-development-branch** - Activates when tasks complete. Verifies tests, presents options (merge/PR/keep/discard), cleans up worktree.
-
-**The agent checks for relevant skills before any task.** Mandatory workflows, not suggestions.
-
-## What's Inside
-
-### Skills Library
-
-**Testing**
-- **test-driven-development** - RED-GREEN-REFACTOR cycle (includes testing anti-patterns reference)
-- **[Benchmark Pipeline](docs/README.benchmark.md)** - Seed-Expand-Review test generation for cross-tool benchmarking
-
-**Debugging**
-- **systematic-debugging** - 4-phase root cause process (includes root-cause-tracing, defense-in-depth, condition-based-waiting techniques)
-- **verification-before-completion** - Ensure it's actually fixed
-
-**Collaboration** 
-- **brainstorming** - Socratic design refinement
-- **writing-plans** - Detailed implementation plans
-- **executing-plans** - Batch execution with checkpoints
-- **dispatching-parallel-agents** - Concurrent subagent workflows
-- **requesting-code-review** - Pre-review checklist
-- **receiving-code-review** - Responding to feedback
-- **using-git-worktrees** - Parallel development branches
-- **finishing-a-development-branch** - Merge/PR decision workflow
-- **subagent-driven-development** - Fast iteration with two-stage review (spec compliance, then code quality)
-
-**Meta**
-- **writing-skills** - Create new skills following best practices (includes testing methodology)
-- **using-superpowers** - Introduction to the skills system
-
-## Philosophy
-
-- **Test-Driven Development** - Write tests first, always
-- **Systematic over ad-hoc** - Process over guessing
-- **Complexity reduction** - Simplicity as primary goal
-- **Evidence over claims** - Verify before declaring success
-
-Read more: [Superpowers for Claude Code](https://blog.fsck.com/2025/10/09/superpowers/)
-
-## Contributing
-
-Skills live directly in this repository. To contribute:
-
-1. Fork the repository
-2. Create a branch for your skill
-3. Follow the `writing-skills` skill for creating and testing new skills
-4. Submit a PR
-
-See `skills/writing-skills/SKILL.md` for the complete guide.
-
-## Updating
-
-Skills update automatically when you update the plugin:
-
-```bash
-/plugin update superpowers
-```
+Built on **[Superpowers](https://github.com/obra/superpowers)** by Jesse Vincent — the auto-triggering skills architecture, the cross-platform packaging, and the benchmark pipeline all come from that project. If it's useful to you, consider [sponsoring his open-source work](https://github.com/sponsors/obra).
 
 ## License
 
-MIT License - see LICENSE file for details
-
-## Support
-
-- **Issues**: https://github.com/obra/superpowers/issues
-- **Marketplace**: https://github.com/obra/superpowers-marketplace
+MIT — see [LICENSE](LICENSE).
