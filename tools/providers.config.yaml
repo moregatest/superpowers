@@ -1,0 +1,19 @@
+# buyersuperpower supplier-search provider config.
+# default_provider: which provider tools/search-suppliers.sh uses when no
+# --provider flag is given. PR2 ships `mock`; PR4 flips this to `playwright`.
+default_provider: mock
+
+# Playwright provider settings (read from PR4 onward; ignored until then).
+playwright:
+  headless: true
+  perSiteTimeoutMs: 20000
+  maxPagesPerSite: 5
+  rateLimitMs: 1500
+
+# Discovery: marketplace/directory domains the finding-suppliers skill filters
+# OUT when searching for official sites (informational in PR2).
+discovery:
+  platformBlocklist:
+    - alibaba.com
+    - made-in-china.com
+    - globalsources.com
