@@ -1,0 +1,9 @@
+{
+  "name": "buyersuperpower",
+  "version": "0.1.0",
+  "private": true,
+  "description": "buyersuperpower supplier-search providers (Playwright extract)",
+  "dependencies": {
+    "playwright": "^1.48.0"
+  }
+}
