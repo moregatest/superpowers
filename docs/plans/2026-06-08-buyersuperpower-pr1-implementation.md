@@ -472,7 +472,7 @@ Stop asking once you have enough to search. Don't interrogate.
 ```markdown
 ---
 name: vetting-suppliers
-description: Use before recommending or contacting any supplier - verify a manufacturer's legitimacy and screen for fraud signals before they reach the buyer
+description: Use when recommending or contacting any supplier - verify a manufacturer's legitimacy and screen for fraud signals before they reach the buyer
 ---
 
 # Vetting Suppliers

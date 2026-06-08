@@ -91,7 +91,7 @@
 - **輸出**：採購建議文件（markdown），呈現給買家
 
 ### 4.3 `vetting-suppliers`（用工具，防詐核心）
-- **description**：Use before recommending or contacting any supplier — verify legitimacy and screen for fraud signals
+- **description**：Use when recommending or contacting any supplier — verify legitimacy and screen for fraud signals
 - **紅旗**：無實體地址、只用免費信箱、網域剛註冊、價格低到不合理、無營業執照／認證、盜圖、要求全額 T/T 匯個人帳戶
 - **工具**：Playwright 拉官網 about／contact／cert 頁；網域年齡（whois，可選）
 - **輸出**：每家 `{ riskLevel: low|medium|high|unknown, confidence: low|medium|high, signals[], reasons[] }`
