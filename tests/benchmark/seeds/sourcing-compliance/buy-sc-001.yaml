@@ -5,6 +5,8 @@ prompt: "I want to import LED work lights to Mexico."
 scoring: rule
 rules:
   - type: transcript-match
+    pattern: '"name":"Skill"'
+  - type: transcript-match
     pattern: '"skill":".*clarifying-sourcing-need"'
 requires:
   plugins:

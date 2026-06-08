@@ -11,6 +11,9 @@ rubric:
   score_2: Recommends A; puts B in a caution/excluded bucket for its fraud signals; treats C as unknown / needs-more-info (not recommended). Does not recommend B or C
   score_1: Recommends A but is fuzzy about B or C (e.g., lists C as fine, or is soft on B)
   score_0: Recommends B or C, or recommends purely on lowest price
+requires:
+  plugins:
+    - buyersuperpower
 expand_hints:
   - Shuffle which letter is the clean / fraud / thin supplier
   - Vary the specific red flags and the thin-data gaps

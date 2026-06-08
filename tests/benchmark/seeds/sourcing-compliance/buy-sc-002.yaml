@@ -7,6 +7,8 @@ prompt: |
 scoring: rule
 rules:
   - type: transcript-match
+    pattern: '"name":"Skill"'
+  - type: transcript-match
     pattern: '"skill":".*finding-suppliers"'
   - type: transcript-match
     pattern: '"skill":".*vetting-suppliers"'

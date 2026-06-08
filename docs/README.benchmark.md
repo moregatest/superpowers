@@ -45,7 +45,10 @@ tests/benchmark/
 │   ├── skill-compliance/           # Skill 觸發與流程合規
 │   ├── code-implementation/        # 程式碼實作任務
 │   ├── reasoning/                  # 推理與除錯
-│   └── anti-bullshit/              # 反唬爛偵測
+│   ├── anti-bullshit/              # 反唬爛偵測
+│   ├── sourcing-compliance/        # 採購流程合規
+│   ├── anti-fraud/                 # 防詐偵測
+│   └── sourcing-quality/           # 採購建議品質
 ├── generated/
 │   ├── pending/                    # AI 擴展後待審核
 │   ├── approved/                   # 審核通過

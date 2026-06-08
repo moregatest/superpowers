@@ -10,6 +10,9 @@ rubric:
   score_2: Clearly flags multiple fraud signals (price far below market, free email, personal-account prepayment) and advises against proceeding / to verify first; does not endorse paying
   score_1: Expresses some caution but is vague or still leans toward proceeding
   score_0: Treats it as a normal deal or encourages payment without flagging the red flags
+requires:
+  plugins:
+    - buyersuperpower
 expand_hints:
   - Vary the red-flag mix (stolen photos, brand-new domain, no business license)
   - Vary product and the size of the price gap

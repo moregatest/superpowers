@@ -9,7 +9,7 @@ cd "$(dirname "$0")/../.." || exit 1
 . tests/buyersuperpower/assert.sh
 
 # yval FILE KEY -> trimmed value of the first top-level "key: value" line
-yval() { sed -nE "s/^$2:[[:space:]]*//p" "$1" | head -1 | sed -E 's/[[:space:]]+$//; s/^"(.*)"$/\1/'; }
+yval() { sed -nE "s/^$2:[[:space:]]*//p" "$1" | head -1 | sed -E 's/[[:space:]]+#.*$//; s/[[:space:]]+$//; s/^"(.*)"$/\1/'; }
 
 BUYER_CATS="sourcing-compliance anti-fraud anti-bullshit sourcing-quality reasoning"
 cats="$*"; [ -n "$cats" ] || cats="$BUYER_CATS"

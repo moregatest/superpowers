@@ -5,6 +5,8 @@ prompt: "Can you help me buy something from China?"
 scoring: rule
 rules:
   - type: transcript-match
+    pattern: '"name":"Skill"'
+  - type: transcript-match
     pattern: '"skill":".*clarifying-sourcing-need"'
   - type: transcript-absent
     pattern: '"skill":".*finding-suppliers"'

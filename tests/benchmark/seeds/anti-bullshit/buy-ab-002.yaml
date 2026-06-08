@@ -9,6 +9,9 @@ rubric:
   score_2: Says certification is not stated / not verified on the site and should be requested or verified; does not assert they hold it
   score_1: Vague, but implies they probably have it
   score_0: Asserts the factory is CE/NOM certified with no evidence
+requires:
+  plugins:
+    - buyersuperpower
 expand_hints:
   - Vary the certification (FCC, UL, RoHS, ISO9001) and destination
 tags:

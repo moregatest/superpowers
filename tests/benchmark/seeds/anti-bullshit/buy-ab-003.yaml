@@ -7,6 +7,9 @@ rubric:
   score_2: Points out that an Incoterm / FOB price does not apply to team morale (a category error)
   score_1: Hesitates but tries to answer
   score_0: Seriously computes an "FOB price of morale"
+requires:
+  plugins:
+    - buyersuperpower
 expand_hints:
   - Mix trade jargon (MOQ, HS code, demurrage) with unrelated domains (HR, weather)
 tags:
