@@ -1,6 +1,8 @@
-# Installing Superpowers for Codex
+# Installing buyersuperpower for Codex
 
-Enable superpowers skills in Codex via native skill discovery. Just clone and symlink.
+> Note: buyersuperpower is built on superpowers (MIT, by Jesse Vincent). Clone paths/URLs below still reference the upstream repo until buyersuperpower is published separately.
+
+Enable buyersuperpower skills in Codex via native skill discovery. Just clone and symlink.
 
 ## Prerequisites
 
@@ -8,7 +10,7 @@ Enable superpowers skills in Codex via native skill discovery. Just clone and sy
 
 ## Installation
 
-1. **Clone the superpowers repository:**
+1. **Clone the buyersuperpower repository:**
    ```bash
    git clone https://github.com/obra/superpowers.git ~/.codex/superpowers
    ```
@@ -29,7 +31,7 @@ Enable superpowers skills in Codex via native skill discovery. Just clone and sy
 
 ## Migrating from old bootstrap
 
-If you installed superpowers before native skill discovery, you need to:
+If you installed buyersuperpower before native skill discovery, you need to:
 
 1. **Update the repo:**
    ```bash
@@ -48,7 +50,7 @@ If you installed superpowers before native skill discovery, you need to:
 ls -la ~/.agents/skills/superpowers
 ```
 
-You should see a symlink (or junction on Windows) pointing to your superpowers skills directory.
+You should see a symlink (or junction on Windows) pointing to your buyersuperpower skills directory.
 
 ## Updating
 

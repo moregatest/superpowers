@@ -1,4 +1,6 @@
-# Installing Superpowers for OpenCode
+# Installing buyersuperpower for OpenCode
+
+> Note: buyersuperpower is built on superpowers (MIT, by Jesse Vincent). Clone paths/URLs below still reference the upstream repo until buyersuperpower is published separately.
 
 ## Prerequisites
 
@@ -7,7 +9,7 @@
 
 ## Installation Steps
 
-### 1. Clone Superpowers
+### 1. Clone buyersuperpower
 
 ```bash
 git clone https://github.com/obra/superpowers.git ~/.config/opencode/superpowers
@@ -25,7 +27,7 @@ ln -s ~/.config/opencode/superpowers/.opencode/plugins/superpowers.js ~/.config/
 
 ### 3. Symlink Skills
 
-Create a symlink so OpenCode's native skill tool discovers superpowers skills:
+Create a symlink so OpenCode's native skill tool discovers buyersuperpower skills:
 
 ```bash
 mkdir -p ~/.config/opencode/skills
@@ -35,9 +37,9 @@ ln -s ~/.config/opencode/superpowers/skills ~/.config/opencode/skills/superpower
 
 ### 4. Restart OpenCode
 
-Restart OpenCode. The plugin will automatically inject superpowers context.
+Restart OpenCode. The plugin will automatically inject buyersuperpower context.
 
-Verify by asking: "do you have superpowers?"
+Verify by asking: "do you have buyersuperpower?"
 
 ## Usage
 
@@ -82,7 +84,7 @@ description: Use when [condition] - [what it does]
 
 Create project-specific skills in `.opencode/skills/` within your project.
 
-**Skill Priority:** Project skills > Personal skills > Superpowers skills
+**Skill Priority:** Project skills > Personal skills > buyersuperpower skills
 
 ## Updating
 
